@@ -18,7 +18,9 @@ def showFront():
     return render_template( 'login.html' )#the only important line, whips up tmplate
 
 
-@app.route("/auth")
+#@app.route("/auth")
+#@app.route("/auth", methods=['GET'])
+@app.route("/auth", methods=['POST'])
 def authenticate():
     print "\n\n\n"
     print "::::DIAG: this Flask obj::::"
@@ -31,6 +33,10 @@ def authenticate():
     #print request.args['username'] #only works if username submitted
     #print "::::DIAG: request.headers::::"
     #print request.headers          #only works for POST
+    if(request.form["username"] == "Asterix" && request.form["password"] == "pass"):
+        return render_template('success.html', )
+    
+    
     return "Knowledge Plzz"
 
 
