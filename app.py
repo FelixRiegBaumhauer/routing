@@ -33,8 +33,10 @@ def authenticate():
     #print request.args['username'] #only works if username submitted
     #print "::::DIAG: request.headers::::"
     #print request.headers          #only works for POST
-    if(request.form["username"] == "Asterix" && request.form["password"] == "pass"):
-        return render_template('success.html', )
+    if(request.form["username"] == "Asterix" and request.form["password"] == "pass"):
+        return render_template('success.html', response = "success", longResponse = 'Congrats user, you have hacked me password')
+    else:
+        return render_template('success.html', response = "Failure", longResponse = 'You failed, Lets leave you out in the cold')
     
     
     return "Knowledge Plzz"
