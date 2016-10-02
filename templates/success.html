@@ -6,9 +6,17 @@
   </head>
 
   <body>
-    {{longResponse}}
+    
+    {#{longResponse}  --Not in use-- #}
+    
+    {% if authLvl == True %}
+    Well done, welcome to the party <br>
+    Bring me back home <a href="/">here</a> <br>
+    {% elif authLvl == False %}
+    Eh, it seems as if you don't have an account <br>
+    To login click <a href="/">here</a> <br>
+    To make an account click <a href="/make_account">here</a> <br>
+    {% endif %}
+    
   </body>
-
-  {% if response equals "Success"%}
-  yay
 </html>
