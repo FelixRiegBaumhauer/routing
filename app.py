@@ -36,10 +36,10 @@ def authenticate():
     if(request.form["username"] == "Asterix" and request.form["password"] == "pass"):
         return render_template('success.html', response = "success", longResponse = 'Congrats user, you have hacked me password')
     else:
-        return render_template('success.html', response = "Failure", longResponse = 'You failed, Lets leave you out in the cold')
+        return render_template('success.html', response = "Failure", longResponse = 'You dont have a password here, to make one click, <a href="/auth">here</a>')
     
     
-    return "Knowledge Plzz"
+    return "Knowledge Plzz" #this should never fire
 
 
     
