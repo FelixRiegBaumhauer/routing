@@ -1,72 +1,101 @@
-import utils.accountPasser
+#HW #04: Big, Heavy, Wood
+#Felix Rieg-Baumhauer
+#10/2/2016
+
+import utils.verifyLogin, utils.createAccount, hashlib
+
 from flask import Flask, render_template, request
 app = Flask(__name__)    #crts Flask object
 
-
-
+#the home page, presents login.html
 @app.route("/")
 def showFront():
-    print "\n\n\n"
-    print "::::DIAG: this Flask obj::::"
-    print app
-    print "::::DIAG: request obj::::"
-    print request
-    print "::::DIAG: request.args::::"
-    print request.args
+    #--------------------------------------------------------------
+    #print "\n\n\n"
+    #print "::::DIAG: this Flask obj::::"
+    #print app
+    #print "::::DIAG: request obj::::"
+    #print request
+    #print "::::DIAG: request.args::::"
+    #print request.args
     #print "::::DIAG: request.args['username'] ::::"
     #print request.args['username'] #only works if username submitted
     #print "::::DIAG: request.headers ::::"
     #print request.headers          #only works for POST
+    #--------------------------------------------------------------
+
     return render_template( 'login.html' )#the only important line, whips up tmplate
 
+#presents the make account page, make_account.html
 @app.route("/make_account")
 def makeMeOne():
-    #test = ["Mickey", "mouse"]
-    return render_template('makeAccount.html')
-    #return (utils.accountPasser.makeAccount(test))
+    return render_template('make_account.html')
 
-@app.route("/accountStatus", methods=['POST'])
+#informUser(), route account_status, is used to process the given future usernames and passwords, passing them on to createAccount in utils, and pulling up account_status
+@app.route("/account_status", methods=['POST'])
 def infomUser():
-    wantedAccount = []
-    wantedAccount.append(request.form["newUsername"])
-    wantedAccount.append(request.form["newPassword"])
-    statusOfApp = utils.accountPasser.makeAccount(wantedAccount)
+    newUser = request.form["newUsername"]
+    statusOfApp=utils.createAccount.checkUser(newUser)
+    
     if(statusOfApp == True):
-        return render_template('accountStatus.html',title="Welcome", text="Welcome to your new account", statusOfApp=statusOfApp)
+        rawPass = request.form["newPassword"]
+        hashPassObj = hashlib.sha1()
+        hashPassObj.update(rawPass)
+        hashedPass = hashPassObj.hexdigest()
+        
+        wantedAccount = []
+        wantedAccount.append(newUser)
+        wantedAccount.append(hashedPass)
+        statusOfApp = utils.createAccount.makeAccount(wantedAccount)
+        
+        if(statusOfApp == True): # should allways be true
+            return render_template('account_status.html',title="Welcome", statusOfApp=statusOfApp)
+        else:
+            return error #----THIS SHOULD NEVER HAPPEN-----#
     else:
-        return render_template('accountStatus.html',title="NO Account For You", text="That username is allready taken", statusOfApp=statusOfApp)
+        return render_template('make_account.html',title="Failure", statusOfApp=statusOfApp)
 
-    return "failsafe"
+    return "failsafe"  #----THIS SHOULD NEVER HAPPEN-----#
+
 
 #@app.route("/auth")
 #@app.route("/auth", methods=['GET'])
+
+#/auth authenticates if your account exists, and the if your password is correct for that account
 @app.route("/auth", methods=['POST'])
 def authenticate():
-    print "\n\n\n"
-    print "::::DIAG: this Flask obj::::"
-    print app
-    print "::::DIAG: request obj::::"
-    print request
-    print "::::DIAG: request.args::::"
-    print request.args
+    
+    #-----------------------------------------------------------
+    #print "\n\n\n"
+    #print "::::DIAG: this Flask obj::::"
+    #print app
+    #print "::::DIAG: request obj::::"
+    #print request
+    #print "::::DIAG: request.args::::"
+    #print request.args
     #print "::::DIAG: request.args['username']::::"
     #print request.args['username'] #only works if username submitted
     #print "::::DIAG: request.headers::::"
     #print request.headers          #only works for POST
+    #------------------------------------------------------------
 
-    accounts = utils.accountPasser.bringAccounts()
-    
-    #if(request.form["username"] == "Asterix" and request.form["password"] == "pass"):
-
+    accounts = utils.verifyLogin.bringAccounts()
     givenUser = request.form["username"]
     givenPass = request.form["password"]
-    if( givenUser in accounts  and givenPass == accounts[givenUser] ):
-        return render_template('success.html', response = "Success", authLvl = True, longResponse = 'Congrats user, you have hacked me password')
+
+    #hashing
+    hashGPassObj = hashlib.sha1()
+    hashGPassObj.update(givenPass)
+    hashedGPass = hashGPassObj.hexdigest() 
+    
+    if( givenUser in accounts  and hashedGPass == accounts[givenUser] ):
+        return render_template('success.html', response = "Success", permission = True, longResponse = 'Congrats user, you have hacked me password')
     else:
-        return render_template('success.html', response = "Failure", authLvl = False, longResponse = 'You dont have a password here, to make one click, <a href="/auth">here</a>')
-    
-    
-    return "Knowledge Plzz" #this should never fire
+        return render_template('login.html', permission = False)
+        #return render_template('success.html', response = "Failure", authLvl = False, longResponse = 'You dont have a password here, to make one click, <a href="/auth">here</a>')
+        
+    #----------------------------------------------------#
+    return "Knowledge Plzz"  #----THIS SHOULD NEVER HAPPEN-----#
 
 
     

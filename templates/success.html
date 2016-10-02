@@ -9,13 +9,13 @@
     
     {#{longResponse}  --Not in use-- #}
     
-    {% if authLvl == True %}
+    {% if permission == True %}
     Well done, welcome to the party <br>
     Bring me back home <a href="/">here</a> <br>
-    {% elif authLvl == False %}
-    Eh, it seems as if you don't have an account <br>
-    To login click <a href="/">here</a> <br>
-    To make an account click <a href="/make_account">here</a> <br>
+    
+    {% elif permission == False %}
+    Broken, this should not have happend
+    
     {% endif %}
     
   </body>

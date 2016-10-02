@@ -2,19 +2,50 @@
 <html>
 
   <head>
-    <title>Dis Example</title>
+    <title>LOGIN</title>
   </head>
 
   <body>
-    <form action="/auth", method="POST">
-      username:<br>
-      <input type="text" name="username">
-      <br>
-      password:<br>
-      <input type="text" name="password">
-      <br>
-      <input type="submit" name="sub1">
-    </form>
+    WELCOME TO THE LOGIN PAGE
+    <br>
+    <br>
+    To login:
+    <br>
+    <br>
+
+    {% if permission is defined%}
+    --WARNING--
+    <br>
+    YOUR USERNAME OR PASSWORD IS NOT CORECT
+    <br>
+    <br>
+    {% endif %}
+    
+    
+    <table border="1">
+      <tr>
+	<td>
+	<form action="/auth", method="POST">
+	  username:<br>
+	  <input type="text" name="username">
+	  <br>
+	  <br>
+	  password:<br>
+	  <input type="text" name="password">
+	  <br>
+	  <br>
+	  <input type="submit" name="sub1">
+	  
+	</form>
+	</td>
+      </tr>
+      </table>
+    <br>
+    <br>
+    To make an account:
+    <br>
+    click <a href="make_account">here</a>
+    <br>
   </body>
 
 </html>
