@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Make Account</title>
+  </head>
+
+  <body>
+
+    Welcome: Please enter your new Username and Password
+
+    <br>
+    <br>
+    {% if statusOfApp is defined%}
+    --WARNING--
+    <br>
+    THAT USERNAME ALLREADY EXISTS
+    <br>
+    PLEASE TRY AGAIN WITH A DIFERENT USERNAME
+    <br>
+    <br>
+    {% endif %}
+    
+    <form action="/account_status", method="POST">
+      username:<br>
+      <input type="text" name="newUsername">
+      <br>
+      password:<br>
+      <input type="text" name="newPassword">
+      <br>
+      <input type="submit" name="sub1">
+    </form>
+  </body>
+
+</html>

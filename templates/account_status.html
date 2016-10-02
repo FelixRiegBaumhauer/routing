@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>{{title}}</title>
+  </head>
+
+  <body>
+
+    {% if statusOfApp == True %}
+    Well done, You have an acount !!! <br>
+    To login click <a href="/">here</a> <br>
+    
+    {% elif statusOfApp == False %}
+    Should not happen
+    Eh, well we can try again <br>
+    To login click <a href="/">here</a> <br>
+    To make an account <a href="/make_account">here</a><br>
+    
+    {% endif %}
+    
+  </body>
+</html>
