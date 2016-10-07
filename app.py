@@ -2,10 +2,22 @@
 #Felix Rieg-Baumhauer
 #10/2/2016
 
-import utils.verifyLogin, utils.createAccount, hashlib
+import utils.verifyLogin, utils.createAccount, hashlib, os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 app = Flask(__name__)    #crts Flask object
+
+
+#Special things for special sessions
+app.secret_key=os.urandom(32)
+secret = "felixwebsite"
+
+#This is how we logout, is activated by a button being pushed
+@app.route("/logout")
+def loggerOuter():
+    print session
+    session.pop(secret)
+    return redirect(url_for("showFront"))
 
 #the home page, presents login.html
 @app.route("/")
@@ -24,7 +36,11 @@ def showFront():
     #print request.headers          #only works for POST
     #--------------------------------------------------------------
 
-    return render_template( 'login.html' )#the only important line, whips up tmplate
+    if(secret in session):
+        return render_template('success.html', response = "Success", permission = True, longResponse = 'You have used a cookie to stay logged in')
+    else:
+        return render_template( 'login.html' )#the only important line, whips up tmplate
+    #return render_template( 'login.html' )#the only important line, whips up tmplate
 
 #presents the make account page, make_account.html
 @app.route("/make_account")
@@ -79,6 +95,14 @@ def authenticate():
     #print request.headers          #only works for POST
     #------------------------------------------------------------
 
+    #---------------------------Testing Purposes
+    #secret = os.urandom(32)
+    #print secret
+    #session["felix"] ="here"
+    #print session
+    #------------------------------------------------------------
+
+    
     accounts = utils.verifyLogin.bringAccounts()
     givenUser = request.form["username"]
     givenPass = request.form["password"]
@@ -89,6 +113,10 @@ def authenticate():
     hashedGPass = hashGPassObj.hexdigest() 
     
     if( givenUser in accounts  and hashedGPass == accounts[givenUser] ):
+        
+        session[secret]=givenUser
+        #print session
+        
         return render_template('success.html', response = "Success", permission = True, longResponse = 'Congrats user, you have hacked me password')
     else:
         return render_template('login.html', permission = False)
