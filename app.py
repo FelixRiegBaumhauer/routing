@@ -1,7 +1,11 @@
-#HW #04: Big, Heavy, Wood
 #Felix Rieg-Baumhauer
-#10/2/2016
+#Softdev pd8
+#HW06 -- I Got Issues, You Got Issues
+#2016-10-10    
 
+
+
+#importing things, not to be touched
 import utils.verifyLogin, utils.createAccount, hashlib, os
 
 from flask import Flask, render_template, request, session, redirect, url_for
@@ -10,7 +14,7 @@ app = Flask(__name__)    #crts Flask object
 
 #Special things for special sessions
 app.secret_key=os.urandom(32)
-secret = "felixwebsite"
+secret = "felixwebsite"#NOT THE REAL ONE, THAT ONE IS A SECRET,
 
 #This is how we logout, is activated by a button being pushed
 @app.route("/logout")
@@ -51,7 +55,8 @@ def makeMeOne():
 @app.route("/account_status", methods=['POST'])
 def infomUser():
     newUser = request.form["newUsername"]
-    statusOfApp=utils.createAccount.checkUser(newUser)
+    statusOfApp=(utils.createAccount.checkUser(newUser) and
+                 (request.form["newPassword"] == request.form["newPassword2"]) and ((newUser or request.form["newPassword"]) != ""))
     
     if(statusOfApp == True):
         rawPass = request.form["newPassword"]
